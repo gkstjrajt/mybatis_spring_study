@@ -8,8 +8,7 @@ public class Employee {
 	private int salary;
 	private Department dept;
 
-	public Employee() {
-	}
+	public Employee() {}
 
 	public Employee(int empNo) {
 		super();
