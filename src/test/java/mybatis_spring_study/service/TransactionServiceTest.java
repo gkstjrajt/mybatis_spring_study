@@ -1,7 +1,5 @@
 package mybatis_spring_study.service;
 
-import static org.junit.Assert.fail;
-
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.junit.After;
@@ -21,9 +19,9 @@ import mybatis_spring_study.dto.Employee;
 @ContextConfiguration(locations = {"classpath:/context-root.xml"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TransactionServiceTest {
-	private static final Log log = LogFactory.getLog(EmployeeServiceTest.class);
+	private static final Log log = LogFactory.getLog(TransactionServiceTest.class);
 	
-	@After		// 메서드 한개 테스트 후 줄띄움
+	@After		// 테스트 한 번 후 줄띄움
 	public void tearDown() throws Exception {
 		System.out.println();
 	}
@@ -34,7 +32,7 @@ public class TransactionServiceTest {
 	@Test(expected = DuplicateKeyException.class)
 	public void testARegisterTransaction_Dept_Fail() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
-		Department department= new Department(1, "태스크포스", 10); // DuplicateKeyException
+		Department department= new Department(1, "태스크포스", 10); 			// DuplicateKeyException
 		Employee employee= new Employee(1004, "박신혜", "과장", new Employee(4377), 4100000, department);
 		
 		service.registerTransaction(department, employee);
@@ -59,7 +57,7 @@ public class TransactionServiceTest {
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testDUnRegisterTransaction() {
+	public void testDUnRegisterTransaction_Dept_Fail() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
 		Department department= new Department(100); // RuntimeException -> rollback
 		Employee employee= new Employee(1006); // rollback 되므로삭제되면안됨
@@ -68,7 +66,7 @@ public class TransactionServiceTest {
 	}
 	
 	@Test(expected = RuntimeException.class)
-	public void testEUnRegisterTransaction() {
+	public void testEUnRegisterTransaction_Emp_Fail() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
 		Department department= new Department(6); // 정상삭제
 		Employee employee= new Employee(9999); // runtimeException -> 삭제안됨
@@ -77,10 +75,10 @@ public class TransactionServiceTest {
 	}
 	
 	@Test
-	public void testFUnRegisterTransaction() {
+	public void testFUnRegisterTransaction_Success() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
 		Department department= new Department(6); // 정상삭제
-		Employee employee= new Employee(1006); // runtimeException -> 삭제안됨
+		Employee employee= new Employee(1006); // 정상삭제
 		
 		service.unRegisterTransaction(department, employee);
 	}
