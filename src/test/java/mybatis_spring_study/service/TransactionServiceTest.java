@@ -35,7 +35,7 @@ public class TransactionServiceTest {
 		Department department= new Department(1, "태스크포스", 10); 			// DuplicateKeyException
 		Employee employee= new Employee(1004, "박신혜", "과장", new Employee(4377), 4100000, department);
 		
-		service.registerTransaction(department, employee);
+		service.trRegister(department, employee);
 	}
 	
 	@Test(expected = DuplicateKeyException.class)
@@ -44,7 +44,7 @@ public class TransactionServiceTest {
 		Department department= new Department(6, "태스크포스", 10);
 		Employee employee= new Employee(4377, "박신혜", "과장", new Employee(4377), 4100000, department);
 		
-		service.registerTransaction(department, employee);
+		service.trRegister(department, employee);
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public class TransactionServiceTest {
 		Department department= new Department(6, "태스크포스", 10);
 		Employee employee= new Employee(1006, "박신혜", "과장", new Employee(4377), 4100000, department);
 		
-		service.registerTransaction(department, employee);
+		service.trRegister(department, employee);
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -62,7 +62,7 @@ public class TransactionServiceTest {
 		Department department= new Department(100); // RuntimeException -> rollback
 		Employee employee= new Employee(1006); // rollback 되므로삭제되면안됨
 		
-		service.unRegisterTransaction(department, employee);
+		service.trUnRegister(department, employee);
 	}
 	
 	@Test(expected = RuntimeException.class)
@@ -71,7 +71,7 @@ public class TransactionServiceTest {
 		Department department= new Department(6); // 정상삭제
 		Employee employee= new Employee(9999); // runtimeException -> 삭제안됨
 		
-		service.unRegisterTransaction(department, employee);
+		service.trUnRegister(department, employee);
 	}
 	
 	@Test
@@ -80,7 +80,7 @@ public class TransactionServiceTest {
 		Department department= new Department(6); // 정상삭제
 		Employee employee= new Employee(1006); // 정상삭제
 		
-		service.unRegisterTransaction(department, employee);
+		service.trUnRegister(department, employee);
 	}
 
 }

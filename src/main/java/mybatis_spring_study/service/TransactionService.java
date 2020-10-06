@@ -5,7 +5,7 @@ import mybatis_spring_study.dto.Employee;
 
 public interface TransactionService {
 
-	void registerTransaction(Department department, Employee employee);
+	void trRegister(Department department, Employee employee);
 
-	void unRegisterTransaction(Department department, Employee employee);
+	void trUnRegister(Department department, Employee employee);
 }
