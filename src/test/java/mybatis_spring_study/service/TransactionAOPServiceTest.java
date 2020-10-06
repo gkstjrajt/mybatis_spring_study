@@ -1,5 +1,7 @@
 package mybatis_spring_study.service;
 
+import static org.junit.Assert.fail;
+
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.junit.After;
@@ -19,67 +21,67 @@ import mybatis_spring_study.dto.Employee;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { ContextRoot.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TransactionServiceTest {
-	protected static final Log log = LogFactory.getLog(TransactionServiceTest.class);
+public class TransactionAOPServiceTest {
+	protected static final Log log = LogFactory.getLog(TransactionAOPServiceTest.class);
 
-	@After		// 결과화면에서 테스트 하나 실행 후 한줄 띄워서 다른 테스트 실행하기 위해서
+	@After
 	public void tearDown() throws Exception {
 		System.out.println();
 	}
 
 	@Autowired
-	private TransactionService service;
-
+	private TransactionAOPService service;
+	
 	@Test(expected = DuplicateKeyException.class)
-	public void testARegisterTransaction_Fail_Dept() {
+	public void testATrRegister_Fail_Dept() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
-		Department department = new Department(1, "태스크포스", 10);			// 무결성제약조건
-		Employee employee = new Employee(1006, "박신혜", "과장", new Employee(4377), 5000000, department);
+		Department department = new Department(1, "태스크포스", 10);
+		Employee employee = new Employee(1009, "박신혜", "과장", new Employee(4377), 4100000, department);
 		
 		service.trRegister(department, employee);
 	}
 	
 	@Test(expected = DuplicateKeyException.class)
-	public void testBRegisterTransaction_Fail_Emp() {
+	public void testBTrRegister_Fail_Emp() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
-		Department department = new Department(7, "태스크포스", 10);			
-		Employee employee = new Employee(4377, "박신혜", "과장", new Employee(4377), 5000000, department);	// 무결성제약조건
+		Department department = new Department(9, "태스크포스", 10);
+		Employee employee = new Employee(4377, "박신혜", "과장", new Employee(4377), 4100000, department);
 		
 		service.trRegister(department, employee);
 	}
 	
 	@Test
-	public void testCRegisterTransaction_Success() {
+	public void testCTrRegister_Success() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
-		Department department = new Department(7, "태스크포스", 10);
-		Employee employee = new Employee(1006, "박신혜", "과장", new Employee(4377), 5000000, department);
+		Department department = new Department(9, "태스크포스", 10);
+		Employee employee = new Employee(1009, "박신혜", "과장", new Employee(4377), 4100000, department);
 		
 		service.trRegister(department, employee);
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testDUnRegisterTransaction_Fail_Dept() {
+	public void testDTrUnRegister_Fail_Dept() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
-		Department department = new Department(100);	// runtimeException => rollback
-		Employee employee = new Employee(1006);
+		Department department = new Department(100);	
+		Employee employee = new Employee(1009);
 		
 		service.trUnRegister(department, employee);
 	}
 	
 	@Test(expected = RuntimeException.class)
-	public void testEUnRegisterTransaction_Fail_Emp() {
+	public void testETrUnRegister_Fail_Emp() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
-		Department department = new Department(7);
-		Employee employee = new Employee(9999);			// runtimeException => rollback
+		Department department = new Department(9);	
+		Employee employee = new Employee(9999);
 		
 		service.trUnRegister(department, employee);
 	}
 	
 	@Test
-	public void testFUnRegisterTransaction_Success() {
+	public void testFTrUnRegister_Success() {
 		log.debug(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
-		Department department = new Department(7);
-		Employee employee = new Employee(1006);
+		Department department = new Department(9);	
+		Employee employee = new Employee(1009);
 		
 		service.trUnRegister(department, employee);
 	}

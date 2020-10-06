@@ -20,8 +20,8 @@ public class TransactionServiceImpl implements TransactionService {
 	private EmployeeMapper empMapper;
 	
 	@Override
-	@Transactional
-	public void registerTransaction(Department department, Employee employee) {
+//	@Transactional
+	public void trRegister(Department department, Employee employee) {
 		int res = deptMapper.insertDepartment(department);
 		res += empMapper.insertEmployee(employee);
 		if(res != 2) {
@@ -30,8 +30,8 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	@Transactional
-	public void unRegisterTransaction(Department department, Employee employee) {
+//	@Transactional
+	public void trUnRegister(Department department, Employee employee) {
 		int res = empMapper.deleteEmployee(employee);
 		res += deptMapper.deleteDepartment(department);
 		if(res != 2) {
